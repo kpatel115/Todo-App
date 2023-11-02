@@ -1,6 +1,7 @@
 import React, {useState, useRef} from 'react'
 import { TodoList } from './TodoList'
 import {v4 as uuidv4 } from 'uuid'
+import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([{name: 'eat breakfast', id: 0, isComplete: false}]);
@@ -18,14 +19,30 @@ function App() {
       return null
     }
   }
+
+  function checkBox(id) {
+    const newStuff = [...todos]
+    const todo = newStuff.find(specificItem => specificItem.id === id);
+    todo.isComplete = !todo.isComplete;
+    setTodos(newStuff)
+  }
+
+  function clearTodos() {
+    const newTodos = todos.filter(todo => !todo.isComplete)
+    setTodos(newTodos)
+  }
   
   return (
     <>
-      <TodoList todos={todos} />
-      <input ref={addRef} type="text" />
-      <button onClick={addTodo}>Add Item</button>
-      <button>Clear All</button>
-      <div>Left to do: 0</div>
+    <div className='flex-column margin-top'>
+        <TodoList todos={todos} checkBox={checkBox} />
+        <input ref={addRef} type="text" />
+      <div className='flex-row'>
+        <button className='padding-5 margin-5' onClick={addTodo}>Add Item</button>
+        <button className='padding-5 margin-5' onClick={clearTodos}>Clear All</button>
+      </div>
+        <div>Left to do: {todos.length}</div>
+      </div>
     </>
   );
 }
